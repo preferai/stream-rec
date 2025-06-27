@@ -30,7 +30,7 @@ This approach enables testing the full HOMETOWN algorithm complexity while maint
 
 #### 1. Generate Base Dataset
 ```bash
-uv run python scripts/generate_synthetic_dataset.py
+uv run python scripts/generate_hometown_dataset.py
 ```
 
 **Default configuration**:
@@ -38,6 +38,7 @@ uv run python scripts/generate_synthetic_dataset.py
 - **500 streams** with realistic geographic clustering
 - **Quality scores** following power-law distribution (simulating real popularity effects)
 - **Language and category preferences** based on geographic regions
+- **10,000 interactions** with location-based click patterns
 
 ## 🎯 POC Overview
 
@@ -63,7 +64,7 @@ A FastAPI service with:
 
 ```bash
 # Clone and install dependencies
-git clone https://github.com/preferai/stream-rec.git
+# git clone https://github.com/your-org/stream-rec.git  # Update with your repository URL
 cd stream-rec
 uv sync
 ```
@@ -80,7 +81,9 @@ uv run python scripts/generate_hometown_dataset.py
 This creates:
 - `data/users.parquet` - 1,000 users across 32 global cities
 - `data/streams.parquet` - 500 streams with quality scores and geo-coordinates
+- `data/interactions.parquet` - User-stream interactions with location preferences
 - `data/hometown_train.parquet` - Training data for ML model (optional)
+- `data/hometown_test.parquet` - Test data for evaluation
 
 ### 3. Start the API Server
 
@@ -213,35 +216,65 @@ curl "http://localhost:8000/v1/scenarios/hometown/stats"
 The HOMETOWN recommendation system uses the following **architecture** for geographic queries:
 
 ```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   API Client    │    │   FastAPI        │    │   Data Layer    │
-│                 │───▶│   Service        │───▶│                 │
-│  • REST calls   │    │                  │    │ • Spatial Index │
-│  • JSON payload │    │  • Validation    │    │ • User/Stream   │
-│  • Response     │    │  • Rate Limits   │    │   Data Store    │
-└─────────────────┘    │  • Error Handling│    └─────────────────┘
-                       └──────────────────┘            │
-                                │                      │
-                                ▼                      │
-                       ┌─────────────────┐             │
-                       │   HOMETOWN      │             │
-                       │  Recommender    │◀────────────┘
-                       │                 │
-                       │ • Spatial Query │    ┌─────────────────┐
-                       │ • Proximity     │───▶│ Quadtree Index  │
-                       │   Scoring       │    │                 │
-                       │ • Rank & Filter │    │ • O(log N)      │
-                       └─────────────────┘    │   Geo Lookup    │
-                                              │ • Distance Calc │
-                                              └─────────────────┘
+┌─────────────────┐    ┌──────────────────┐    
+│   API Client    │    │   FastAPI        │    
+│                 │───▶│   Service        │    
+│  • REST calls   │    │                  │    
+│  • JSON payload │    │  • /hometown     │───┐
+│  • Response     │    │  • /hometown-ml  │   │
+                       │  • Validation    │   │
+                       │  • Error Handling│   │
+                       └──────────────────┘   │
+                                              │
+         ┌────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────┐    ┌─────────────────────┐    ┌─────────────────┐
+│ HOMETOWN        │    │   Data Store        │    │ Spatial Index   │
+│ Recommender     │───▶│   Service           │───▶│                 │
+│                 │    │                     │    │ • Quadtree      │
+│ • Basic (no ML) │    │ • User Data         │    │ • O(log N)      │
+│ • ML-Enhanced   │    │ • Stream Data       │    │   Geo Lookup    │
+│ • Spatial Query │    │ • Coordinate        │    │ • Distance Calc │
+│ • Proximity     │    │   Indexing          │    │ • Bbox Queries  │
+│   Scoring       │    └─────────────────────┘    └─────────────────┘
+│ • ML Prediction │           │
+│ • Rank & Filter │           │
+└─────────────────┘           │
+         │                    │
+         ▼                    ▼
+┌─────────────────┐    ┌─────────────────┐
+│  ML Model       │    │  Raw Data       │
+│  (Optional)     │    │                 │
+│                 │    │ • users.parquet │
+│ • Logistic      │    │ • streams.parquet│
+│   Regression    │    │ • hometown_train │
+│ • Click         │    └─────────────────┘
+│   Prediction    │
+│ • 14 Features   │
+└─────────────────┘
 ```
 
 ### Core Components
 
-#### 1. Spatial Index (`DataStore`)
+#### 1. FastAPI Service (`main.py`)
+**File**: `src/stream_rec/api/main.py`
+
+Two recommendation endpoints with shared infrastructure:
+```python
+# Two separate recommender instances
+hometown_recommender_basic = HometownRecommender(data_store)
+hometown_recommender_ml = HometownRecommender(data_store, model_path="models/hometown_model.pkl")
+
+# Two endpoints for comparison
+@app.post("/v1/scenarios/hometown")        # Basic algorithm
+@app.post("/v1/scenarios/hometown-ml")     # ML-enhanced algorithm
+```
+
+#### 2. Data Store Service (`DataStore`)
 **File**: `src/stream_rec/services/data_store.py`
 
-The heart of our performance optimization:
+Handles data loading and spatial indexing:
 ```python
 # Build spatial index on startup
 self._stream_spatial_index = Index(bbox=[-180, -90, 180, 90])
@@ -250,12 +283,44 @@ for stream in self._streams.values():
     self._stream_spatial_index.insert(item=stream.stream_id, bbox=bbox)
 ```
 
-**Why this matters**:
-- **O(log N)**: Query spatial index for nearby candidates only instead of checking distance to every stream for every request which would be O(N)
-- **Impact**: 100x faster queries for large datasets
+**Key Features**:
+- **Fast Data Loading**: Efficient pandas operations for parquet files
+- **Spatial Indexing**: Quadtree for O(log N) geographic queries instead of O(N)
+- **Memory Management**: Optimized data structures for quick lookups
 
+#### 3. HOMETOWN Recommender (`HometownRecommender`)
+**File**: `src/stream_rec/services/hometown_recommender.py`
 
-#### 2. Weighted Scoring Algorithm
+Core recommendation logic with optional ML enhancement:
+```python
+def __init__(self, data_store: DataStore, model_path: str = None):
+    self.data_store = data_store
+    self.model = None
+    
+    # Load ML model if provided
+    if model_path and Path(model_path).exists():
+        self.model = joblib.load(model_path)
+```
+
+**Key Features**:
+- **Spatial Queries**: Uses DataStore's spatial index for candidate selection
+- **Multi-factor Scoring**: Combines proximity, quality, preferences, and optional ML
+- **Graceful Degradation**: Works with or without ML model
+- **Performance**: O(log N) candidate selection + O(k) scoring where k << N
+
+#### 4. Optional ML Model (`model_trainer.py`)
+**File**: `src/stream_rec/services/model_trainer.py`
+
+Logistic Regression for click prediction enhancement:
+```python
+# 14 engineered features combining geography, preferences, and quality
+features = ['distance_km', 'proximity_boost', 'same_language', 'category_match', ...]
+model = LogisticRegression(random_state=42, max_iter=1000)
+```
+
+**Impact**: +0.17 to +0.21 average score improvement over basic algorithm
+
+#### 5. Weighted Scoring Algorithm
 **File**: `src/stream_rec/services/hometown_recommender.py`
 
 ```python
@@ -454,7 +519,7 @@ We train a **Logistic Regression classifier** to predict the probability that a 
 uv run python scripts/generate_hometown_dataset.py
 
 # Train the logistic regression model (creates models/hometown_model.pkl)
-uv run python src/stream_rec/services/model_trainer.py
+uv run python -m stream_rec.services.model_trainer
 ```
 
 **What this step does**:
@@ -534,7 +599,7 @@ final_score = (
 )
 ```
 
-**Response (ML-Enhanced)**:
+**Response (ML-Enhanced):**
 ```json
 {
   "streams": [
@@ -562,36 +627,6 @@ curl -X POST "http://localhost:8000/v1/scenarios/hometown-ml" \
   -H "Content-Type: application/json" \
   -d '{"user_id": "user_000001", "max_results": 3}' | jq
 ```
-
-### Comparison Tool
-
-For detailed side-by-side analysis, use the provided comparison script:
-
-```bash
-# Run the comprehensive comparison tool
-uv run python test_both_endpoints.py
-```
-
-**Sample Output**:
-```
-🎯 HOMETOWN Algorithm Comparison Tool
-=====================================
-
-🏠 Testing user: user_000001
-================================================================================
-📊 COMPARISON RESULTS:
-Rank Basic Algorithm                           ML-Enhanced Algorithm          
-------------------------------------------------------------------------------
-1    stream_000294 (score: 5.777)             stream_000294 (score: 5.983)  
-2    stream_000083 (score: 5.552)             stream_000083 (score: 5.770)  
-3    stream_000039 (score: 4.074)             stream_000039 (score: 4.252)  
-
-📈 AVERAGE SCORES:
-Basic Algorithm: 4.237
-ML-Enhanced:     4.441
-ML Boost:        +0.205
-```
-
 
 ### Model Details: Logistic Regression for Click Prediction
 
@@ -640,3 +675,70 @@ ml_score = click_probability  # 0.0 to 1.0
 # Integrated into final scoring:
 final_score = (1.5 * proximity_score) + (1.0 * base_score) + (0.5 * ml_score)
 ```
+
+## 📊 Evaluation Results & Performance Analysis
+
+### Comprehensive Algorithm Evaluation
+
+We've conducted thorough testing of both the basic and ML-enhanced HOMETOWN algorithms using standard ranking metrics. Here are the complete results:
+
+### Running the Evaluation
+
+```bash
+# Run comprehensive evaluation with nDCG@5, Precision@5, etc.
+uv run python evaluate_recommendations.py
+
+# Run detailed algorithm comparison
+uv run python detailed_comparison.py
+
+# Compare side-by-side results for specific users
+uv run python test_both_endpoints.py
+```
+
+---
+
+## 📊 Evaluation Results
+
+**Test Dataset**: 1,041 user-stream interactions from 198 users (109 with positive interactions evaluated)
+
+### Core Accuracy Metrics
+
+| Metric | Basic Algorithm | ML-Enhanced | Difference |
+|--------|----------------|-------------|------------|
+| **nDCG@5** | 0.1956 ± 0.300 | 0.1940 ± 0.298 | -0.8% |
+| **Precision@5** | 0.0826 ± 0.112 | 0.0826 ± 0.112 | 0.0% |
+| **Recall@5** | 0.2483 ± 0.364 | 0.2483 ± 0.364 | 0.0% |
+| **Hit Rate@5** | 0.3761 ± 0.484 | 0.3761 ± 0.484 | 0.0% |
+| **F1-Score@5** | 0.1180 ± 0.157 | 0.1180 ± 0.157 | 0.0% |
+
+### Advanced Ranking Metrics
+
+| Metric | Basic Algorithm | ML-Enhanced | Difference |
+|--------|----------------|-------------|------------|
+| **MAP@5** | 0.1524 ± 0.273 | 0.1505 ± 0.271 | -1.3% |
+| **MRR** | 0.2402 ± 0.348 | 0.2387 ± 0.347 | -0.6% |
+| **Novelty@5** | 0.8156 ± 0.185 | 0.8156 ± 0.185 | 0.0% |
+
+### Performance Metrics
+
+| Metric | Basic Algorithm | ML-Enhanced | Overhead |
+|--------|----------------|-------------|----------|
+| **Response Time** | 1.69ms ± 0.63ms | 2.83ms ± 1.51ms | +67.8% |
+| **API Errors** | 0/198 users | 0/198 users | 100% reliability |
+
+### Key Evaluation Insights
+
+#### 🎯 **Algorithm Behavior Analysis**
+
+These evaluation reveals that both algorithms exhibit **consistent behavior**.
+
+#### 🧪 **Synthetic Dataset Limitations & Real-World Considerations**
+
+**Important Disclaimer**: These evaluation results are based on a **synthetically generated dataset** designed to simulate user behavior patterns. Several factors should be considered when interpreting these results:
+
+1. **Dataset Scale**: With only 198 users and 176 positive interactions, this evaluation represents a **proof-of-concept scale** rather than production volume. Statistical significance testing would require substantially larger datasets.
+
+2. **Synthetic Behavior**: Real user preferences and geographic patterns are likely more complex and nuanced than our synthetic model captures. The ML algorithm might demonstrate **greater benefits with authentic behavioral data**.
+
+
+**For Future Validation**: Significant testing on a **representative production dataset** with real user interactions would be essential to validate these findings and measure true ML model effectiveness in the HOMETOWN scenario.

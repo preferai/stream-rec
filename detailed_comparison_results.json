@@ -1,0 +1,1119 @@
+{
+  "total_users_analyzed": 20,
+  "identical_recommendations": 16,
+  "identical_percentage": 80.0,
+  "avg_ranking_similarity": 0.9939718614718615,
+  "avg_score_correlation": 0.999986392316119,
+  "avg_score_improvement_pct": 5.271323161852712,
+  "score_improvement_std": 3.4910067310778725,
+  "detailed_results": [
+    {
+      "user_id": "user_000817",
+      "basic_streams": [
+        "stream_000272",
+        "stream_000214",
+        "stream_000437",
+        "stream_000344",
+        "stream_000169"
+      ],
+      "ml_streams": [
+        "stream_000272",
+        "stream_000214",
+        "stream_000437",
+        "stream_000344",
+        "stream_000169"
+      ],
+      "basic_scores": [
+        3.418,
+        1.929,
+        1.83,
+        1.462,
+        0.695
+      ],
+      "ml_scores": [
+        3.646,
+        2.154,
+        2.038,
+        1.685,
+        0.919
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999707492947817,
+      "basic_stats": {
+        "mean": 1.8668000000000002,
+        "std": 0.8886419751508479,
+        "min": 0.695,
+        "max": 3.418
+      },
+      "ml_stats": {
+        "mean": 2.0884,
+        "std": 0.8903021060291838,
+        "min": 0.919,
+        "max": 3.646
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000871",
+      "basic_streams": [
+        "stream_000393",
+        "stream_000210",
+        "stream_000439",
+        "stream_000275",
+        "stream_000241",
+        "stream_000489",
+        "stream_000043"
+      ],
+      "ml_streams": [
+        "stream_000393",
+        "stream_000210",
+        "stream_000439",
+        "stream_000275",
+        "stream_000489",
+        "stream_000241",
+        "stream_000043"
+      ],
+      "basic_scores": [
+        12.369,
+        9.973,
+        8.259,
+        3.945,
+        2.963,
+        2.962,
+        2.889
+      ],
+      "ml_scores": [
+        12.538,
+        10.138,
+        8.422,
+        4.084,
+        3.119,
+        3.119,
+        3.026
+      ],
+      "ranking_similarity": 0.9642857142857145,
+      "score_correlation": 0.9999978923092626,
+      "basic_stats": {
+        "mean": 6.194285714285715,
+        "std": 3.655561348891604,
+        "min": 2.889,
+        "max": 12.369
+      },
+      "ml_stats": {
+        "mean": 6.349428571428571,
+        "std": 3.6644220693092677,
+        "min": 3.026,
+        "max": 12.538
+      },
+      "recommendations_identical": false
+    },
+    {
+      "user_id": "user_000335",
+      "basic_streams": [
+        "stream_000125",
+        "stream_000321",
+        "stream_000462",
+        "stream_000317",
+        "stream_000329",
+        "stream_000366",
+        "stream_000037",
+        "stream_000385",
+        "stream_000372",
+        "stream_000047"
+      ],
+      "ml_streams": [
+        "stream_000125",
+        "stream_000321",
+        "stream_000462",
+        "stream_000317",
+        "stream_000329",
+        "stream_000366",
+        "stream_000037",
+        "stream_000385",
+        "stream_000372",
+        "stream_000047"
+      ],
+      "basic_scores": [
+        11.843,
+        11.367,
+        11.216,
+        9.263,
+        6.103,
+        5.434,
+        4.611,
+        3.867,
+        3.702,
+        3.315
+      ],
+      "ml_scores": [
+        12.056,
+        11.576,
+        11.431,
+        9.469,
+        6.311,
+        5.614,
+        4.817,
+        4.072,
+        3.866,
+        3.519
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999925151489352,
+      "basic_stats": {
+        "mean": 7.072100000000001,
+        "std": 3.295530046896857,
+        "min": 3.315,
+        "max": 11.843
+      },
+      "ml_stats": {
+        "mean": 7.273100000000001,
+        "std": 3.303944686280325,
+        "min": 3.519,
+        "max": 12.056
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000878",
+      "basic_streams": [
+        "stream_000044",
+        "stream_000208",
+        "stream_000155",
+        "stream_000414",
+        "stream_000106"
+      ],
+      "ml_streams": [
+        "stream_000044",
+        "stream_000208",
+        "stream_000155",
+        "stream_000414",
+        "stream_000106"
+      ],
+      "basic_scores": [
+        11.63,
+        2.867,
+        1.622,
+        1.461,
+        1.329
+      ],
+      "ml_scores": [
+        11.808,
+        3.037,
+        1.806,
+        1.645,
+        1.513
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999991264266735,
+      "basic_stats": {
+        "mean": 3.7817999999999996,
+        "std": 3.9622765880236077,
+        "min": 1.329,
+        "max": 11.63
+      },
+      "ml_stats": {
+        "mean": 3.9617999999999993,
+        "std": 3.9605496285237987,
+        "min": 1.513,
+        "max": 11.808
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000575",
+      "basic_streams": [
+        "stream_000264",
+        "stream_000053",
+        "stream_000057",
+        "stream_000171",
+        "stream_000005",
+        "stream_000121",
+        "stream_000280",
+        "stream_000461",
+        "stream_000250",
+        "stream_000145"
+      ],
+      "ml_streams": [
+        "stream_000264",
+        "stream_000053",
+        "stream_000057",
+        "stream_000171",
+        "stream_000005",
+        "stream_000121",
+        "stream_000280",
+        "stream_000461",
+        "stream_000250",
+        "stream_000145"
+      ],
+      "basic_scores": [
+        11.766,
+        7.437,
+        7.046,
+        5.622,
+        5.349,
+        4.962,
+        4.564,
+        3.638,
+        3.43,
+        3.167
+      ],
+      "ml_scores": [
+        11.93,
+        7.618,
+        7.245,
+        5.815,
+        5.542,
+        5.151,
+        4.744,
+        3.833,
+        3.6,
+        3.363
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999917931784857,
+      "basic_stats": {
+        "mean": 5.6981,
+        "std": 2.4374261609328807,
+        "min": 3.167,
+        "max": 11.766
+      },
+      "ml_stats": {
+        "mean": 5.8841,
+        "std": 2.432087681396376,
+        "min": 3.363,
+        "max": 11.93
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000571",
+      "basic_streams": [
+        "stream_000426",
+        "stream_000309",
+        "stream_000377",
+        "stream_000279",
+        "stream_000298",
+        "stream_000059",
+        "stream_000062",
+        "stream_000140",
+        "stream_000100",
+        "stream_000422"
+      ],
+      "ml_streams": [
+        "stream_000426",
+        "stream_000309",
+        "stream_000377",
+        "stream_000279",
+        "stream_000298",
+        "stream_000059",
+        "stream_000140",
+        "stream_000062",
+        "stream_000100",
+        "stream_000422"
+      ],
+      "basic_scores": [
+        11.39,
+        11.2,
+        6.061,
+        4.856,
+        4.573,
+        4.493,
+        4.217,
+        4.201,
+        4.15,
+        4.123
+      ],
+      "ml_scores": [
+        11.609,
+        11.403,
+        6.276,
+        5.042,
+        4.763,
+        4.694,
+        4.407,
+        4.404,
+        4.368,
+        4.315
+      ],
+      "ranking_similarity": 0.9878787878787878,
+      "score_correlation": 0.999992782014098,
+      "basic_stats": {
+        "mean": 5.926399999999999,
+        "std": 2.738957546220824,
+        "min": 4.123,
+        "max": 11.39
+      },
+      "ml_stats": {
+        "mean": 6.1281,
+        "std": 2.744202122657877,
+        "min": 4.315,
+        "max": 11.609
+      },
+      "recommendations_identical": false
+    },
+    {
+      "user_id": "user_000495",
+      "basic_streams": [
+        "stream_000261",
+        "stream_000362",
+        "stream_000203",
+        "stream_000289",
+        "stream_000320",
+        "stream_000417",
+        "stream_000215",
+        "stream_000220",
+        "stream_000041",
+        "stream_000381"
+      ],
+      "ml_streams": [
+        "stream_000261",
+        "stream_000362",
+        "stream_000203",
+        "stream_000289",
+        "stream_000320",
+        "stream_000417",
+        "stream_000215",
+        "stream_000220",
+        "stream_000041",
+        "stream_000381"
+      ],
+      "basic_scores": [
+        9.937,
+        3.885,
+        3.28,
+        2.505,
+        2.124,
+        1.979,
+        1.913,
+        1.611,
+        1.486,
+        1.481
+      ],
+      "ml_scores": [
+        10.156,
+        4.092,
+        3.461,
+        2.711,
+        2.329,
+        2.185,
+        2.094,
+        1.791,
+        1.692,
+        1.686
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999889914094755,
+      "basic_stats": {
+        "mean": 3.0201000000000002,
+        "std": 2.4237335435232974,
+        "min": 1.481,
+        "max": 9.937
+      },
+      "ml_stats": {
+        "mean": 3.2197000000000005,
+        "std": 2.429991853895811,
+        "min": 1.686,
+        "max": 10.156
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000236",
+      "basic_streams": [
+        "stream_000232",
+        "stream_000342",
+        "stream_000262",
+        "stream_000353",
+        "stream_000498",
+        "stream_000285"
+      ],
+      "ml_streams": [
+        "stream_000232",
+        "stream_000342",
+        "stream_000262",
+        "stream_000353",
+        "stream_000498",
+        "stream_000285"
+      ],
+      "basic_scores": [
+        4.048,
+        3.885,
+        3.112,
+        1.407,
+        1.243,
+        1.217
+      ],
+      "ml_scores": [
+        4.226,
+        4.095,
+        3.304,
+        1.615,
+        1.45,
+        1.424
+      ],
+      "ranking_similarity": 1.0,
+      "score_correlation": 0.9999712939076014,
+      "basic_stats": {
+        "mean": 2.4853333333333336,
+        "std": 1.232109933767636,
+        "min": 1.217,
+        "max": 4.048
+      },
+      "ml_stats": {
+        "mean": 2.6856666666666666,
+        "std": 1.2251656577332262,
+        "min": 1.424,
+        "max": 4.226
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000246",
+      "basic_streams": [
+        "stream_000004",
+        "stream_000474",
+        "stream_000395",
+        "stream_000343",
+        "stream_000229"
+      ],
+      "ml_streams": [
+        "stream_000004",
+        "stream_000474",
+        "stream_000395",
+        "stream_000343",
+        "stream_000229"
+      ],
+      "basic_scores": [
+        3.721,
+        2.256,
+        1.228,
+        1.222,
+        0.83
+      ],
+      "ml_scores": [
+        3.923,
+        2.464,
+        1.435,
+        1.398,
+        1.03
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999433298308394,
+      "basic_stats": {
+        "mean": 1.8514,
+        "std": 1.0475815195009885,
+        "min": 0.83,
+        "max": 3.721
+      },
+      "ml_stats": {
+        "mean": 2.05,
+        "std": 1.051023691455145,
+        "min": 1.03,
+        "max": 3.923
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000779",
+      "basic_streams": [
+        "stream_000232",
+        "stream_000342",
+        "stream_000285",
+        "stream_000262",
+        "stream_000353",
+        "stream_000498"
+      ],
+      "ml_streams": [
+        "stream_000232",
+        "stream_000342",
+        "stream_000285",
+        "stream_000262",
+        "stream_000353",
+        "stream_000498"
+      ],
+      "basic_scores": [
+        4.078,
+        3.915,
+        2.248,
+        2.142,
+        1.438,
+        1.273
+      ],
+      "ml_scores": [
+        4.247,
+        4.116,
+        2.43,
+        2.34,
+        1.636,
+        1.471
+      ],
+      "ranking_similarity": 1.0,
+      "score_correlation": 0.9999567424375929,
+      "basic_stats": {
+        "mean": 2.5156666666666667,
+        "std": 1.1042250173261285,
+        "min": 1.273,
+        "max": 4.078
+      },
+      "ml_stats": {
+        "mean": 2.7066666666666666,
+        "std": 1.0987140463084812,
+        "min": 1.471,
+        "max": 4.247
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000796",
+      "basic_streams": [
+        "stream_000333",
+        "stream_000216",
+        "stream_000423",
+        "stream_000265",
+        "stream_000011",
+        "stream_000076",
+        "stream_000170",
+        "stream_000028",
+        "stream_000093",
+        "stream_000012"
+      ],
+      "ml_streams": [
+        "stream_000333",
+        "stream_000216",
+        "stream_000423",
+        "stream_000265",
+        "stream_000011",
+        "stream_000076",
+        "stream_000170",
+        "stream_000028",
+        "stream_000093",
+        "stream_000012"
+      ],
+      "basic_scores": [
+        12.031,
+        11.731,
+        9.692,
+        9.113,
+        8.109,
+        4.881,
+        4.225,
+        3.623,
+        3.411,
+        3.262
+      ],
+      "ml_scores": [
+        12.224,
+        11.943,
+        9.905,
+        9.301,
+        8.319,
+        5.089,
+        4.434,
+        3.786,
+        3.62,
+        3.472
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999898792538661,
+      "basic_stats": {
+        "mean": 7.0078000000000005,
+        "std": 3.332907253435055,
+        "min": 3.262,
+        "max": 12.031
+      },
+      "ml_stats": {
+        "mean": 7.209300000000001,
+        "std": 3.3346064850293806,
+        "min": 3.472,
+        "max": 12.224
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000477",
+      "basic_streams": [
+        "stream_000018",
+        "stream_000021",
+        "stream_000445",
+        "stream_000237",
+        "stream_000254",
+        "stream_000468",
+        "stream_000191",
+        "stream_000369",
+        "stream_000144",
+        "stream_000386"
+      ],
+      "ml_streams": [
+        "stream_000021",
+        "stream_000445",
+        "stream_000018",
+        "stream_000237",
+        "stream_000254",
+        "stream_000468",
+        "stream_000191",
+        "stream_000369",
+        "stream_000144",
+        "stream_000386"
+      ],
+      "basic_scores": [
+        11.82,
+        11.82,
+        11.82,
+        11.106,
+        10.276,
+        9.935,
+        9.482,
+        6.444,
+        6.352,
+        5.362
+      ],
+      "ml_scores": [
+        12.042,
+        12.039,
+        12.034,
+        11.337,
+        10.484,
+        10.165,
+        9.668,
+        6.666,
+        6.577,
+        5.553
+      ],
+      "ranking_similarity": 0.9636363636363635,
+      "score_correlation": 0.9999822152726139,
+      "basic_stats": {
+        "mean": 9.4417,
+        "std": 2.363392817540072,
+        "min": 5.362,
+        "max": 11.82
+      },
+      "ml_stats": {
+        "mean": 9.6565,
+        "std": 2.3675321856312745,
+        "min": 5.553,
+        "max": 12.042
+      },
+      "recommendations_identical": false
+    },
+    {
+      "user_id": "user_000131",
+      "basic_streams": [
+        "stream_000212",
+        "stream_000066",
+        "stream_000225",
+        "stream_000257",
+        "stream_000436",
+        "stream_000117",
+        "stream_000404",
+        "stream_000378"
+      ],
+      "ml_streams": [
+        "stream_000212",
+        "stream_000066",
+        "stream_000225",
+        "stream_000257",
+        "stream_000436",
+        "stream_000117",
+        "stream_000404",
+        "stream_000378"
+      ],
+      "basic_scores": [
+        12.063,
+        11.88,
+        10.886,
+        2.561,
+        2.062,
+        2.011,
+        1.659,
+        1.289
+      ],
+      "ml_scores": [
+        12.26,
+        12.095,
+        11.075,
+        2.773,
+        2.267,
+        2.196,
+        1.87,
+        1.492
+      ],
+      "ranking_similarity": 1.0,
+      "score_correlation": 0.9999976539531014,
+      "basic_stats": {
+        "mean": 5.551375,
+        "std": 4.715423335648136,
+        "min": 1.289,
+        "max": 12.063
+      },
+      "ml_stats": {
+        "mean": 5.753500000000001,
+        "std": 4.71439749596913,
+        "min": 1.492,
+        "max": 12.26
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000185",
+      "basic_streams": [
+        "stream_000018",
+        "stream_000021",
+        "stream_000445",
+        "stream_000237",
+        "stream_000468",
+        "stream_000191",
+        "stream_000254",
+        "stream_000369",
+        "stream_000144",
+        "stream_000386"
+      ],
+      "ml_streams": [
+        "stream_000021",
+        "stream_000445",
+        "stream_000018",
+        "stream_000237",
+        "stream_000468",
+        "stream_000191",
+        "stream_000254",
+        "stream_000369",
+        "stream_000144",
+        "stream_000386"
+      ],
+      "basic_scores": [
+        12.134,
+        12.134,
+        12.134,
+        11.419,
+        10.249,
+        9.795,
+        9.589,
+        6.757,
+        6.665,
+        5.676
+      ],
+      "ml_scores": [
+        12.318,
+        12.316,
+        12.312,
+        11.613,
+        10.441,
+        9.947,
+        9.777,
+        6.943,
+        6.854,
+        5.832
+      ],
+      "ranking_similarity": 0.9636363636363635,
+      "score_correlation": 0.9999840542627747,
+      "basic_stats": {
+        "mean": 9.6552,
+        "std": 2.3472485083603742,
+        "min": 5.676,
+        "max": 12.134
+      },
+      "ml_stats": {
+        "mean": 9.8353,
+        "std": 2.3510559351066065,
+        "min": 5.832,
+        "max": 12.318
+      },
+      "recommendations_identical": false
+    },
+    {
+      "user_id": "user_000545",
+      "basic_streams": [
+        "stream_000094",
+        "stream_000390",
+        "stream_000035",
+        "stream_000282"
+      ],
+      "ml_streams": [
+        "stream_000094",
+        "stream_000390",
+        "stream_000035",
+        "stream_000282"
+      ],
+      "basic_scores": [
+        10.804,
+        2.998,
+        2.156,
+        1.638
+      ],
+      "ml_scores": [
+        11.03,
+        3.208,
+        2.372,
+        1.852
+      ],
+      "ranking_similarity": 1.0,
+      "score_correlation": 0.999999733697234,
+      "basic_stats": {
+        "mean": 4.399,
+        "std": 3.7296446211401966,
+        "min": 1.638,
+        "max": 10.804
+      },
+      "ml_stats": {
+        "mean": 4.6155,
+        "std": 3.734872521251562,
+        "min": 1.852,
+        "max": 11.03
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000088",
+      "basic_streams": [
+        "stream_000044",
+        "stream_000208",
+        "stream_000155",
+        "stream_000414",
+        "stream_000106"
+      ],
+      "ml_streams": [
+        "stream_000044",
+        "stream_000208",
+        "stream_000155",
+        "stream_000414",
+        "stream_000106"
+      ],
+      "basic_scores": [
+        11.445,
+        2.683,
+        2.437,
+        2.277,
+        1.144
+      ],
+      "ml_scores": [
+        11.613,
+        2.843,
+        2.597,
+        2.436,
+        1.318
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999988247703612,
+      "basic_stats": {
+        "mean": 3.9972000000000003,
+        "std": 3.7611410183613163,
+        "min": 1.144,
+        "max": 11.445
+      },
+      "ml_stats": {
+        "mean": 4.1614,
+        "std": 3.762281148452359,
+        "min": 1.318,
+        "max": 11.613
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000491",
+      "basic_streams": [
+        "stream_000094",
+        "stream_000390",
+        "stream_000035",
+        "stream_000282"
+      ],
+      "ml_streams": [
+        "stream_000094",
+        "stream_000390",
+        "stream_000035",
+        "stream_000282"
+      ],
+      "basic_scores": [
+        12.066,
+        3.26,
+        2.418,
+        1.899
+      ],
+      "ml_scores": [
+        12.267,
+        3.46,
+        2.625,
+        2.105
+      ],
+      "ranking_similarity": 1.0,
+      "score_correlation": 0.9999998165242899,
+      "basic_stats": {
+        "mean": 4.91075,
+        "std": 4.159537797339988,
+        "min": 1.899,
+        "max": 12.066
+      },
+      "ml_stats": {
+        "mean": 5.11425,
+        "std": 4.157833773432988,
+        "min": 2.105,
+        "max": 12.267
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000360",
+      "basic_streams": [
+        "stream_000198",
+        "stream_000247"
+      ],
+      "ml_streams": [
+        "stream_000198",
+        "stream_000247"
+      ],
+      "basic_scores": [
+        1.516,
+        1.362
+      ],
+      "ml_scores": [
+        1.73,
+        1.57
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 1.0,
+      "basic_stats": {
+        "mean": 1.439,
+        "std": 0.07699999999999996,
+        "min": 1.362,
+        "max": 1.516
+      },
+      "ml_stats": {
+        "mean": 1.65,
+        "std": 0.07999999999999996,
+        "min": 1.57,
+        "max": 1.73
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000152",
+      "basic_streams": [
+        "stream_000095",
+        "stream_000099",
+        "stream_000249",
+        "stream_000179",
+        "stream_000067",
+        "stream_000392",
+        "stream_000111",
+        "stream_000271",
+        "stream_000239",
+        "stream_000010"
+      ],
+      "ml_streams": [
+        "stream_000095",
+        "stream_000099",
+        "stream_000249",
+        "stream_000179",
+        "stream_000067",
+        "stream_000392",
+        "stream_000111",
+        "stream_000271",
+        "stream_000239",
+        "stream_000010"
+      ],
+      "basic_scores": [
+        12.239,
+        12.222,
+        11.817,
+        11.425,
+        8.867,
+        8.525,
+        8.443,
+        7.783,
+        7.098,
+        6.457
+      ],
+      "ml_scores": [
+        12.448,
+        12.41,
+        12.018,
+        11.647,
+        9.049,
+        8.746,
+        8.657,
+        8.003,
+        7.317,
+        6.638
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999722342912051,
+      "basic_stats": {
+        "mean": 9.487599999999999,
+        "std": 2.107844548347909,
+        "min": 6.457,
+        "max": 12.239
+      },
+      "ml_stats": {
+        "mean": 9.693299999999999,
+        "std": 2.107491307218134,
+        "min": 6.638,
+        "max": 12.448
+      },
+      "recommendations_identical": true
+    },
+    {
+      "user_id": "user_000036",
+      "basic_streams": [
+        "stream_000426",
+        "stream_000309",
+        "stream_000377",
+        "stream_000140",
+        "stream_000100",
+        "stream_000279",
+        "stream_000298",
+        "stream_000062",
+        "stream_000422",
+        "stream_000096"
+      ],
+      "ml_streams": [
+        "stream_000426",
+        "stream_000309",
+        "stream_000377",
+        "stream_000140",
+        "stream_000100",
+        "stream_000279",
+        "stream_000298",
+        "stream_000062",
+        "stream_000422",
+        "stream_000096"
+      ],
+      "basic_scores": [
+        11.61,
+        11.419,
+        7.28,
+        5.421,
+        5.369,
+        5.075,
+        4.793,
+        4.437,
+        4.342,
+        4.248
+      ],
+      "ml_scores": [
+        11.833,
+        11.628,
+        7.485,
+        5.616,
+        5.576,
+        5.266,
+        4.987,
+        4.628,
+        4.54,
+        4.439
+      ],
+      "ranking_similarity": 0.9999999999999999,
+      "score_correlation": 0.9999982183391866,
+      "basic_stats": {
+        "mean": 6.3994,
+        "std": 2.686785633428912,
+        "min": 4.248,
+        "max": 11.61
+      },
+      "ml_stats": {
+        "mean": 6.599799999999999,
+        "std": 2.69534338443175,
+        "min": 4.439,
+        "max": 11.833
+      },
+      "recommendations_identical": true
+    }
+  ]
+}

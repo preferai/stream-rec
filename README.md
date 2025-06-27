@@ -1,3 +1,22 @@
+# Stream Recommendation System
+
+A production-ready proof-of-concept for intelligent live stream recommendations, starting with the **HOMETOWN** scenario that prioritizes streams from the user's geographic region.
+
+## 🚀 Quick Start & Evaluation
+
+```bash
+# Setup and start API
+uv sync && uv run python run_server.py
+
+# Run comprehensive evaluation suite
+uv run python evaluate_recommendations.py    # nDCG@5, Precision@5, Recall@5
+uv run python detailed_comparison.py         # Algorithm behavior analysis  
+uv run python test_both_endpoints.py         # Side-by-side comparison
+```
+
+**Evaluation Results**: Both basic and ML-enhanced algorithms achieve 0.196 nDCG@5 with <3ms response times on all 198 test users. See [`COMPREHENSIVE_ACCURACY_REPORT.md`](COMPREHENSIVE_ACCURACY_REPORT.md) for detailed metrics and [`EVALUATION_SUMMARY.md`](EVALUATION_SUMMARY.md) for complete results.
+
+---
 
 ## Task: [Streaming Service Scenarios](material/Task.md)
 
