@@ -42,6 +42,7 @@ class Stream(BaseModel):
 class HometownRequest(BaseModel):
     """Request schema for HOMETOWN scenario endpoint."""
     user_id: str
+    max_results: Optional[int] = 20
 
 
 class StreamRecommendation(BaseModel):

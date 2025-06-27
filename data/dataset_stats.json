@@ -1,0 +1,40 @@
+{
+  "dataset_info": {
+    "scenario": "HOMETOWN",
+    "generation_timestamp": "2025-06-27T01:51:22.102886",
+    "total_users": 1000,
+    "total_streams": 500,
+    "total_interactions": 5000,
+    "train_interactions": 3959,
+    "test_interactions": 1041
+  },
+  "location_stats": {
+    "cities_covered": 32,
+    "avg_distance_km": 3444.795594664736,
+    "local_interaction_rate": 0.3048,
+    "regional_interaction_rate": 0.4666
+  },
+  "performance_stats": {
+    "overall_ctr": 0.1868,
+    "local_ctr": 0.2782152230971129,
+    "non_local_ctr": 0.14672036823935558,
+    "avg_watch_time_local": 14.939463102531079,
+    "avg_watch_time_non_local": 6.888074593864904
+  },
+  "feature_importance_hints": {
+    "key_features": [
+      "distance_km",
+      "proximity_boost",
+      "is_local_match",
+      "user_local_preference",
+      "same_city",
+      "same_language",
+      "stream_quality_score",
+      "page_position"
+    ],
+    "target_variables": [
+      "clicked",
+      "watch_time_minutes"
+    ]
+  }
+}

@@ -12,9 +12,14 @@ wheels/
 # Environment variables
 .env
 
-# Data files (keep directory structure but ignore generated data)
-data/*.parquet
-data/*.json
+# Data files (allow synthetic POC data but ignore large production data)
+# Comment out the following lines to allow synthetic data for POC:
+# data/*.parquet
+# data/*.json
+
+# Uncomment these if you need to exclude specific large data files:
+# data/large_*.parquet
+# data/production_*.parquet
 
 # Unnecessary files
 prototype/prompt.iypnb
