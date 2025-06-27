@@ -1,15 +1,15 @@
 """
-Typer CLI for training recommendation models:
+Typer CLI for training HOMETOWN recommendation models:
 
-1. Load parquet data from ./data
-2. Train candidate generator via CandidateGenerator.fit()
-3. Build feature frame (candidate_score, watch_time label)
-4. Train ranker via Ranker.fit()
-5. Save trained models to data directory
-6. Print Recall@100 and NDCG@10 on hold-out users
+1. Load parquet data from ./data (or generate synthetic data)
+2. Check for required hometown_train.parquet file
+3. Train HOMETOWN ML model via HometownModelTrainer
+4. Initialize DataStore and evaluate both basic and ML algorithms
+5. Save trained model to models/hometown_model.pkl
+6. Print training accuracy, AUC score, and algorithm comparison
 
-Note: This script is for general recommendation scenarios.
-For HOMETOWN-specific recommendations, use model_trainer.py instead.
+This script now uses the working HometownModelTrainer implementation
+instead of the previously missing CandidateGenerator/Ranker classes.
 """
 import typer
 from pathlib import Path
@@ -19,11 +19,17 @@ import numpy as np
 from tqdm import tqdm
 import random
 from datetime import datetime
+import sys
 
-# Import our models and services
-from src.stream_rec.models.candidate_generator import CandidateGenerator
-from src.stream_rec.models.ranker import Ranker
-from src.stream_rec.services.feature_store import FeatureStore
+# Add src to Python path for imports
+script_dir = Path(__file__).parent
+src_dir = script_dir.parent / "src"
+sys.path.insert(0, str(src_dir))
+
+# Import our implemented services
+from stream_rec.services.model_trainer import HometownModelTrainer
+from stream_rec.services.data_store import DataStore
+from stream_rec.services.hometown_recommender import HometownRecommender
 
 app = typer.Typer()
 
@@ -118,109 +124,58 @@ def train_test_split(df: pd.DataFrame, test_ratio: float = 0.2) -> tuple[pd.Data
     return train_df, test_df
 
 
-def build_ranking_features(train_df: pd.DataFrame, candidate_generator: CandidateGenerator, 
-                          feature_store: FeatureStore) -> pd.DataFrame:
-    """Build feature dataframe for ranker training."""
-    typer.echo("Building ranking features...")
+def train_hometown_model(data_dir: Path) -> dict:
+    """Train the HOMETOWN model using HometownModelTrainer."""
+    typer.echo("🏠 Training HOMETOWN model...")
     
-    features_list = []
-    unique_users = train_df['user_id'].unique()[:1000]  # Limit for demo
+    trainer = HometownModelTrainer(data_dir=str(data_dir))
     
-    for user_id in tqdm(unique_users, desc="Extracting features"):
-        # Get user's actual interactions
-        user_interactions = train_df[train_df['user_id'] == user_id]
-        
-        # Get candidate recommendations
-        candidates = candidate_generator.top_k(user_id, k=100)
-        
-        # Get user and stream features
-        user_features = feature_store.get_user_features(user_id)
-        
-        for candidate in candidates:
-            stream_id = candidate['stream_id']
-            stream_features = feature_store.get_stream_features(stream_id)
-            
-            # Check if user actually watched this stream
-            actual_interaction = user_interactions[user_interactions['stream_id'] == stream_id]
-            
-            if len(actual_interaction) > 0:
-                # Positive example
-                label = 1
-                watch_time = actual_interaction['watch_time'].iloc[0]
-            else:
-                # Negative example (not watched)
-                label = 0
-                watch_time = 0
-            
-            # Combine features
-            feature_row = {
-                'user_id': user_id,
-                'stream_id': stream_id,
-                'label': label,
-                'watch_time': watch_time,
-                'candidate_score': candidate['score'],
-                # User features
-                'user_engagement_rate': user_features.get('engagement_rate', 0.5),
-                'user_session_length': user_features.get('avg_session_length', 60),
-                'user_watch_hours': user_features.get('total_watch_hours', 100),
-                # Stream features
-                'stream_viewer_count': stream_features.get('viewer_count', 1000),
-                'stream_duration': stream_features.get('duration_minutes', 120),
-                'creator_followers': stream_features.get('creator_followers', 10000),
-                'chat_activity': stream_features.get('chat_activity_rate', 1.0),
-                # Interaction features
-                'category_match': 1 if stream_features.get('category_id') in user_features.get('preferred_categories', []) else 0,
-                'language_match': 1 if stream_features.get('language') == user_features.get('locale', 'en')[:2] else 0,
-            }
-            
-            features_list.append(feature_row)
+    # Train the model
+    results = trainer.train()
     
-    return pd.DataFrame(features_list)
+    # Save the model
+    trainer.save_model()
+    
+    return results
 
 
-def evaluate_models(test_df: pd.DataFrame, candidate_generator: CandidateGenerator, 
-                   ranker: Ranker) -> dict:
-    """Evaluate trained models on test set."""
-    typer.echo("Evaluating models...")
+def evaluate_hometown_model(test_df: pd.DataFrame, data_store: DataStore) -> dict:
+    """Evaluate the HOMETOWN model with basic metrics."""
+    typer.echo("📊 Evaluating HOMETOWN model...")
     
-    recall_100_scores = []
-    ndcg_10_scores = []
+    # Initialize recommenders
+    basic_recommender = HometownRecommender(data_store)
+    ml_recommender = HometownRecommender(data_store, model_path="models/hometown_model.pkl")
     
-    test_users = test_df['user_id'].unique()[:100]  # Limit for demo
+    # Simple evaluation on a subset of users
+    test_users = test_df['user_id'].unique()[:50]  # Limit for demo
+    
+    basic_scores = []
+    ml_scores = []
     
     for user_id in tqdm(test_users, desc="Evaluating"):
-        # Get user's test interactions
-        user_test = test_df[test_df['user_id'] == user_id]
-        actual_streams = set(user_test['stream_id'].tolist())
-        
-        if len(actual_streams) == 0:
+        try:
+            # Get recommendations from both algorithms
+            basic_recs = basic_recommender.recommend_streams(user_id, max_results=10)
+            ml_recs = ml_recommender.recommend_streams(user_id, max_results=10)
+            
+            # Simple scoring based on average scores
+            if basic_recs:
+                basic_avg_score = sum(rec['score'] for rec in basic_recs) / len(basic_recs)
+                basic_scores.append(basic_avg_score)
+            
+            if ml_recs:
+                ml_avg_score = sum(rec['score'] for rec in ml_recs) / len(ml_recs)
+                ml_scores.append(ml_avg_score)
+                
+        except Exception as e:
+            typer.echo(f"Warning: Failed to evaluate user {user_id}: {e}")
             continue
-        
-        # Get recommendations
-        candidates = candidate_generator.top_k(user_id, k=200)
-        ranked_recs = ranker.rank(user_id, candidates, top_n=100)
-        
-        # Calculate Recall@100
-        recommended_streams = set([rec['stream_id'] for rec in ranked_recs])
-        recall_100 = len(actual_streams.intersection(recommended_streams)) / len(actual_streams)
-        recall_100_scores.append(recall_100)
-        
-        # Calculate NDCG@10
-        top_10_recs = ranked_recs[:10]
-        dcg = 0
-        for i, rec in enumerate(top_10_recs):
-            if rec['stream_id'] in actual_streams:
-                dcg += 1 / np.log2(i + 2)  # +2 because log2(1) = 0
-        
-        # Ideal DCG (assume all relevant items at top)
-        ideal_dcg = sum(1 / np.log2(i + 2) for i in range(min(10, len(actual_streams))))
-        
-        ndcg_10 = dcg / ideal_dcg if ideal_dcg > 0 else 0
-        ndcg_10_scores.append(ndcg_10)
     
     return {
-        'recall_100': np.mean(recall_100_scores),
-        'ndcg_10': np.mean(ndcg_10_scores)
+        'basic_avg_score': np.mean(basic_scores) if basic_scores else 0,
+        'ml_avg_score': np.mean(ml_scores) if ml_scores else 0,
+        'users_evaluated': len(basic_scores)
     }
 
 
@@ -230,8 +185,8 @@ def train(
     test_ratio: float = typer.Option(0.2, help="Fraction of users for testing"),
     force_synthetic: bool = typer.Option(False, help="Force generation of synthetic data")
 ):
-    """Train recommendation models and evaluate performance."""
-    typer.echo("🚀 Starting model training pipeline...")
+    """Train HOMETOWN recommendation model and evaluate performance."""
+    typer.echo("🚀 Starting HOMETOWN model training pipeline...")
     
     # Setup directories
     data_path = Path(data_dir)
@@ -246,35 +201,43 @@ def train(
     # Train/test split
     train_df, test_df = train_test_split(df, test_ratio)
     
-    # Initialize components
-    typer.echo("Initializing models and feature store...")
-    candidate_generator = CandidateGenerator()
-    ranker = Ranker()
-    feature_store = FeatureStore()
+    # Check if we have HOMETOWN training data
+    hometown_train_path = data_path / "hometown_train.parquet"
+    if not hometown_train_path.exists():
+        typer.echo("⚠️  No HOMETOWN training data found.")
+        typer.echo("   Run: uv run python scripts/generate_hometown_dataset.py")
+        typer.echo("   This will generate the required hometown_train.parquet file.")
+        return
     
-    # Train CandidateGenerator model
-    typer.echo("🔥 Training candidate generator model...")
-    candidate_generator.fit(train_df)
-    
-    # Build ranking features
-    ranking_features = build_ranking_features(train_df, candidate_generator, feature_store)
-    
-    # Train Ranker (XGBoost)
-    typer.echo("🎯 Training XGBoost ranker...")
-    ranker.fit(ranking_features)
-    
-    # Evaluate models
-    metrics = evaluate_models(test_df, candidate_generator, ranker)
-    
-    # Print results
-    typer.echo("\n📊 Evaluation Results:")
-    typer.echo(f"Recall@100: {metrics['recall_100']:.4f}")
-    typer.echo(f"NDCG@10: {metrics['ndcg_10']:.4f}")
-    
-    typer.echo("\n✅ Training completed successfully!")
-    typer.echo(f"Models saved to:")
-    typer.echo(f"  - Candidate Generator: data/candidate_generator.ckpt")
-    typer.echo(f"  - Ranker: data/ranker.pkl")
+    # Train HOMETOWN model
+    try:
+        results = train_hometown_model(data_path)
+        
+        # Initialize data store for evaluation
+        typer.echo("� Initializing data store for evaluation...")
+        data_store = DataStore()
+        
+        # Evaluate model
+        eval_metrics = evaluate_hometown_model(test_df, data_store)
+        
+        # Print results
+        typer.echo("\n📊 Training Results:")
+        typer.echo(f"Train Accuracy: {results['train_accuracy']:.4f}")
+        typer.echo(f"Test Accuracy: {results['test_accuracy']:.4f}")
+        typer.echo(f"AUC Score: {results['auc_score']:.4f}")
+        
+        typer.echo("\n📊 Evaluation Results:")
+        typer.echo(f"Basic Algorithm Avg Score: {eval_metrics['basic_avg_score']:.4f}")
+        typer.echo(f"ML Algorithm Avg Score: {eval_metrics['ml_avg_score']:.4f}")
+        typer.echo(f"Users Evaluated: {eval_metrics['users_evaluated']}")
+        
+        typer.echo("\n✅ HOMETOWN model training completed successfully!")
+        typer.echo(f"Model saved to: models/hometown_model.pkl")
+        
+    except Exception as e:
+        typer.echo(f"❌ Training failed: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":

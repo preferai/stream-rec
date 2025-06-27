@@ -320,6 +320,24 @@ model = LogisticRegression(random_state=42, max_iter=1000)
 
 **Impact**: +0.17 to +0.21 average score improvement over basic algorithm
 
+#### 5. Training Scripts
+
+**Two Training Options Available**:
+
+**`src/stream_rec/services/model_trainer.py`** - Direct model training:
+- **Purpose**: Simple, focused ML model training
+- **Usage**: `uv run python -m stream_rec.services.model_trainer`
+- **Output**: Trained model file only
+- **Best for**: Production deployment
+
+**`scripts/train_models.py`** - Comprehensive training pipeline:
+- **Purpose**: Training + evaluation + comparison
+- **Usage**: `uv run python scripts/train_models.py`
+- **Output**: Model file + performance metrics + algorithm comparison
+- **Best for**: Development and analysis
+
+Both scripts train the **same Logistic Regression model** but serve different purposes in the development workflow.
+
 #### 5. Weighted Scoring Algorithm
 **File**: `src/stream_rec/services/hometown_recommender.py`
 
@@ -518,9 +536,25 @@ We train a **Logistic Regression classifier** to predict the probability that a 
 # Generate training data (if not already done)
 uv run python scripts/generate_hometown_dataset.py
 
-# Train the logistic regression model (creates models/hometown_model.pkl)
+# Method 1: Direct model training (recommended)
 uv run python -m stream_rec.services.model_trainer
+
+# Method 2: Full training pipeline with evaluation (alternative)
+uv run python scripts/train_models.py
 ```
+
+**Training Methods**:
+
+**Method 1** (Direct): Simple model training only
+- Faster execution
+- Focuses purely on model training
+- Saves model to `models/hometown_model.pkl`
+
+**Method 2** (Pipeline): Comprehensive training with evaluation
+- Trains the same Logistic Regression model
+- Includes side-by-side algorithm comparison
+- Reports training metrics and evaluation results
+- Useful for development and analysis
 
 **What this step does**:
 - Loads training data from `data/hometown_train.parquet`
@@ -726,11 +760,6 @@ uv run python test_both_endpoints.py
 | **Response Time** | 1.69ms ± 0.63ms | 2.83ms ± 1.51ms | +67.8% |
 | **API Errors** | 0/198 users | 0/198 users | 100% reliability |
 
-### Key Evaluation Insights
-
-#### 🎯 **Algorithm Behavior Analysis**
-
-These evaluation reveals that both algorithms exhibit **consistent behavior**.
 
 #### 🧪 **Synthetic Dataset Limitations & Real-World Considerations**
 
@@ -742,3 +771,6 @@ These evaluation reveals that both algorithms exhibit **consistent behavior**.
 
 
 **For Future Validation**: Significant testing on a **representative production dataset** with real user interactions would be essential to validate these findings and measure true ML model effectiveness in the HOMETOWN scenario.
+
+---
+

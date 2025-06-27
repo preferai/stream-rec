@@ -18,8 +18,8 @@
     "std_coverage": 0.3637845089902629,
     "avg_novelty": 0.8155963302752293,
     "std_novelty": 0.1853211009174312,
-    "avg_response_times": 0.0016782480642336224,
-    "std_response_times": 0.0006246665870321716,
+    "avg_response_times": 0.0016131401062011719,
+    "std_response_times": 0.0005509502049799711,
     "total_users": 198,
     "evaluated_users": 109,
     "errors": 0
@@ -43,8 +43,8 @@
     "std_coverage": 0.3637845089902629,
     "avg_novelty": 0.8155963302752293,
     "std_novelty": 0.1853211009174312,
-    "avg_response_times": 0.002829087983577623,
-    "std_response_times": 0.0014790564391502087,
+    "avg_response_times": 0.0028210254984164457,
+    "std_response_times": 0.0014496401189714812,
     "total_users": 198,
     "evaluated_users": 109,
     "errors": 0
