@@ -1,0 +1,43 @@
+services:
+  # HOMETOWN Recommendation API
+  hometown-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: hometown-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/code/data:ro  # Mount synthetic dataset as read-only
+      - ./logs:/code/logs     # Mount logs directory
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  # Redis for caching (optional, for future enhancements)
+  redis:
+    image: redis:7-alpine
+    container_name: hometown-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  redis_data:

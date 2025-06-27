@@ -1,0 +1,18 @@
+# Development override for docker-compose.yml
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  hometown-api:
+    # Mount source code for live reload during development
+    volumes:
+      - ./src:/code/src
+      - ./run_server.py:/code/run_server.py
+      - ./test_api.py:/code/test_api.py
+      - ./data:/code/data:ro
+    # Enable auto-reload for development
+    command: ["uv", "run", "uvicorn", "src.stream_rec.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=DEBUG
+    # Override restart policy for development
+    restart: "no"

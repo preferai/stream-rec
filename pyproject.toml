@@ -1,0 +1,61 @@
+[[tool.uv.index]]
+name = "pypi"            
+url = "https://pypi.org/simple"
+default = true            # makes this the first/“fallback” index
+
+[project]
+name = "stream-comm"
+version = "0.1.0"
+description = "Stream Recommender"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bs4>=0.0.2",
+    "dotenv>=0.9.9",
+    "faiss-cpu>=1.11.0",
+    "fastapi",
+    "ipywidgets>=8.1.7",
+    "langchain>=0.3.25",
+    "langchain-anthropic>=0.3.15",
+    "langgraph>=0.4.7",
+    "numpy>=2.2.6",
+    "pandas>=2.2.3",
+    "python-dotenv",
+    "recbole",
+    "redis",
+    "scikit-learn>=1.6.1",
+    "sentence-transformers>=4.1.0",
+    "tqdm>=4.67.1",
+    "torch",
+    "typer",
+    "uvicorn[standard]",
+    "xgboost",
+    "geopy>=2.4.1",
+    "pyarrow>=20.0.0",
+    "pydantic>=2.11.5",
+    "joblib>=1.5.1",
+    "pyqtree>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "black",
+    "ipykernel>=6.29.5",
+    "isort",
+    "pytest",
+    "pytest-asyncio",
+    "jupyter",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "requests>=2.31.0",
+    "httpx>=0.24.0",
+]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D100",  # ignore warning on missing docstrings in public module
+    "D101",  # ignore warning on missing docstrings in public class
+    "T201",  # ignore warning on using the print function
+    "ERA001",  # allow commented-out code to exist
+]

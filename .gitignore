@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment variables
+.env
+
+# Data files (keep directory structure but ignore generated data)
+data/*.parquet
+data/*.json
+
+# Unnecessary files
+prototype/prompt.iypnb
+prototype/prompt.py
+prototype/res.txt
+prompt.iypnb
+prompt.py
+res.txt
