@@ -1,12 +1,15 @@
 """
-Typer CLI:
+Typer CLI for training recommendation models:
 
 1. Load parquet data from ./data
-2. Train LightGCN via CandidateGenerator.fit()
+2. Train candidate generator via CandidateGenerator.fit()
 3. Build feature frame (candidate_score, watch_time label)
-4. Train Ranker.fit()
-5. Save models to data/lightgcn.ckpt and data/ranker.pkl
+4. Train ranker via Ranker.fit()
+5. Save trained models to data directory
 6. Print Recall@100 and NDCG@10 on hold-out users
+
+Note: This script is for general recommendation scenarios.
+For HOMETOWN-specific recommendations, use model_trainer.py instead.
 """
 import typer
 from pathlib import Path
@@ -249,8 +252,8 @@ def train(
     ranker = Ranker()
     feature_store = FeatureStore()
     
-    # Train CandidateGenerator (LightGCN)
-    typer.echo("🔥 Training LightGCN candidate generator...")
+    # Train CandidateGenerator model
+    typer.echo("🔥 Training candidate generator model...")
     candidate_generator.fit(train_df)
     
     # Build ranking features
@@ -270,7 +273,7 @@ def train(
     
     typer.echo("\n✅ Training completed successfully!")
     typer.echo(f"Models saved to:")
-    typer.echo(f"  - LightGCN: data/lightgcn.ckpt")
+    typer.echo(f"  - Candidate Generator: data/candidate_generator.ckpt")
     typer.echo(f"  - Ranker: data/ranker.pkl")
 
 
